@@ -1,0 +1,7 @@
+
+springDemo/.idea
+springDemo/.mvn
+springDemo/*.properties
+springDemo/HELP.md
+
+flaskDemo/config/sftpConfig.ini
