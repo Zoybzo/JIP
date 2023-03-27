@@ -21,13 +21,14 @@ def hello_world():  # put application's code here
 def callSftp():
     sftp = SftpUtil('config/sftpConfig.ini')
     sftp.uploadFile(FileUtil.getAllFiles(cfg.get('sftp', 'localpath')))
+    testSpringDemo()
     return "sftp succeed"
 
 
 def testSpringDemo():
-    tgt = cfg.get('sftp', 'hostname') + ':' + cfg.get('sftp', 'springboot-port') + '/test'
-    print(requests.get(tgt).content)
-    return requests.get(tgt).content
+    tgt = cfg.get('sftp', 'http-hostname') + ':' + cfg.get('sftp', 'springboot-port') + '/sftp/test'
+    print(requests.post(tgt, data='placeholder').content)
+    return requests.post(tgt, data='placeholder').content
 
 
 def testSftpSprintDemo():
