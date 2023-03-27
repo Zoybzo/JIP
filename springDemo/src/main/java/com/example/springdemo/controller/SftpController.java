@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +23,8 @@ public class SftpController {
 
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult testRequest(BindingResult result) {
+    public CommonResult testRequest(@RequestBody String placeholder, BindingResult result) {
+        LOGGER.info("testRequest: ", placeholder);
         return CommonResult.success(null, "test success");
     }
 
@@ -35,7 +33,8 @@ public class SftpController {
      */
     @RequestMapping(value = "/sftp", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult testSftp(BindingResult result) {
+    public CommonResult testSftp(@RequestBody String placeholder, BindingResult result) {
+        LOGGER.info("testSftp");
         scheduleApplication.triggerUploadFile();
         return CommonResult.success(null, "sftp finished");
     }

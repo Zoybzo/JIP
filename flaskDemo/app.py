@@ -15,7 +15,7 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
-@app.route('/sftp', methods='POST')
+@app.route('/sftp', methods=['POST'])
 def callSftp():
     sftp = SftpUtil('../config.ini')
     sftp.uploadFile(FileUtil.getAllFiles(cfg.get('sftp', 'localpath')))

@@ -1,0 +1,4 @@
+server:
+  port: 8080
+webclient:
+  hostname: 45.76.54.41

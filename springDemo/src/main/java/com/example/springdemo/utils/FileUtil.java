@@ -24,13 +24,14 @@ public class FileUtil {
         File dirs[] = f.listFiles();
         for (File dir : dirs) {
             if (dir.isDirectory()) {
-                LOGGER.debug(dir.getName() + " [目录]");
+                LOGGER.debug("[目录] " + dir.getName());
                 File[] files = dir.listFiles();
                 for (File file : files) {
                     res.add(Paths.get(dir.getName(), file.getName()));
                 }
             } else {
-                LOGGER.error("不应该存在的文件：" + dir.getName());
+                LOGGER.debug("[文件] " + dir.getName());
+                res.add(Paths.get(dir.getName()));
             }
         }
         return res;

@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
 
@@ -73,13 +74,27 @@ public class AsyncLogicImpl implements AsyncLogic {
                     password,
                     Integer.parseInt(timeout),
                     remoteDir);
+            // 上传子文件夹中的文件
             ArrayList<Path> path = getFilePathForUpload(properties.getProperty("sftp.localpath"));
-            for (; begin < path.size(); begin++) {
+            for (; begin < Objects.requireNonNull(path).size(); begin++) {
                 Path filepath = path.get(begin);
-                String filepathString = filepath.toString();
-                String remoteTargetPathString = Paths.get(remoteDir, filepathString).toString();
-                ftp.upload(remoteTargetPathString, filepathString, sftpConfig);
-                LOGGER.info("文件上传成功：[{}]", remoteTargetPathString);
+                String filepathString = filepath.toString().replace('\\', '/'); // 包含文件名的文件路径
+                LOGGER.info("filepathString: " + filepathString);
+                String pathWithoutFilename = filepathString.substring(filepathString.lastIndexOf('/') + 1);
+                // 按照斜杠划分，把最后一个字符串去掉
+                String remoteTargetDirPathString = remoteDir;
+                if (filepathString.contains("/")) {
+                    int endIndex = filepathString.lastIndexOf("/");
+                    String dirPathString = filepathString.substring(0, endIndex); // not forgot to put check if(endIndex != -1)
+                    LOGGER.info("dirPathString: " + dirPathString);
+                    remoteTargetDirPathString = Paths.get(remoteDir, dirPathString).toString().replace('\\', '/');
+                }
+                LOGGER.info(pathWithoutFilename);
+                LOGGER.info("remoteTargetDirPathString: " + remoteTargetDirPathString);
+                filepathString = properties.getProperty("sftp.localpath").replace('\\', '/') + '/' + filepathString;
+                LOGGER.info("filepathString: " + filepathString);
+                ftp.upload(remoteTargetDirPathString, filepathString, sftpConfig);
+                LOGGER.info("文件上传成功：[{}]", filepathString);
             }
         } catch (Exception e) {
             LOGGER.error("文件上传下载异常:[{}]", e.getMessage());

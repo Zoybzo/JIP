@@ -18,8 +18,7 @@ import java.util.Vector;
  * SFTP 工具类
  */
 public class SftpUtil {
-    private static final Logger logger = LoggerFactory.getLogger(SftpUtil.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(SftpUtil.class);
 
     private long count;
     /**
@@ -47,7 +46,7 @@ public class SftpUtil {
             jsch = new JSch();
             jsch.getSession(sftpConfig.getUsername(), sftpConfig.getHostname(), sftpConfig.getPort());
             Session sshSession = jsch.getSession(sftpConfig.getUsername(), sftpConfig.getHostname(), sftpConfig.getPort());
-            logger.info("Session created ... UserName={} host={} port={}", sftpConfig.getUsername(), sftpConfig.getHostname(), sftpConfig.getPort());
+            LOGGER.info("Session created ... UserName={} host={} port={}", sftpConfig.getUsername(), sftpConfig.getHostname(), sftpConfig.getPort());
             sshSession.setPassword(sftpConfig.getPassword());
             Properties sshConfig = new Properties();
             sshConfig.put("StrictHostKeyChecking", "no");
@@ -55,13 +54,13 @@ public class SftpUtil {
             sshSession.setConfig(sshConfig);
             sshSession.connect(connectionTimeout);
 //            sshSession = getSession(sftpConfig, sshConfig);
-            logger.info("Session connected ...");
-            logger.info("Opening Channel ...");
+            LOGGER.info("Session connected ...");
+            LOGGER.info("Opening Channel ...");
             ChannelSftp channel = (ChannelSftp) sshSession.openChannel("sftp");
             channel.connect(connectionTimeout);
 //            channel.connect();
             sftp = (ChannelSftp) channel;
-            logger.info("登录成功");
+            LOGGER.info("登录成功");
         } catch (Exception e) {
             try {
                 count1 += 1;
@@ -69,7 +68,7 @@ public class SftpUtil {
                     throw new RuntimeException(e);
                 }
 //                Thread.sleep(sleepTime);
-                logger.info("重新连接....");
+                LOGGER.info("重新连接....");
                 connect(sftpConfig);
             } catch (Exception e1) {
                 throw new RuntimeException(e1);
@@ -86,15 +85,20 @@ public class SftpUtil {
      * @param sftpConfig
      */
     public void upload(String directory, String uploadFile, SftpConfig sftpConfig) {
+        LOGGER.info("directory: " + directory);
+        LOGGER.info("uploadFile: " + uploadFile);
         ChannelSftp sftp = connect(sftpConfig);
         try {
             sftp.cd(directory);
-            logger.debug(directory);
+            LOGGER.debug(directory);
         } catch (SftpException e) {
             try {
                 sftp.mkdir(directory);
                 sftp.cd(directory);
+                LOGGER.info("ftp创建文件路径成功！" + directory);
             } catch (SftpException e1) {
+                e1.printStackTrace();
+                LOGGER.error(e1.toString());
                 throw new RuntimeException("ftp创建文件路径失败" + directory);
             }
         }
@@ -127,23 +131,23 @@ public class SftpUtil {
             if (!localDirFile.exists()) {
                 localDirFile.mkdirs();
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("开始获取远程文件:[{}]---->[{}]", new Object[]{directory, saveFile});
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("开始获取远程文件:[{}]---->[{}]", new Object[]{directory, saveFile});
             }
             ChannelSftp sftp = connect(sftpConfig);
             sftp.cd(directory);
-            if (logger.isInfoEnabled()) {
-                logger.info("打开远程文件:[{}]", new Object[]{directory});
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("打开远程文件:[{}]", new Object[]{directory});
             }
             output = new FileOutputStream(new File(saveFile.concat(File.separator).concat(downloadFile)));
             sftp.get(downloadFile, output);
-            if (logger.isInfoEnabled()) {
-                logger.info("文件下载成功");
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("文件下载成功");
             }
             disConnect(sftp);
         } catch (Exception e) {
-            if (logger.isInfoEnabled()) {
-                logger.info("文件下载出现异常，[{}]", e);
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("文件下载出现异常，[{}]", e);
             }
             throw new RuntimeException("文件下载出现异常，[{}]", e);
         } finally {
@@ -164,13 +168,13 @@ public class SftpUtil {
         if (!localDirFile.exists()) {
             localDirFile.mkdirs();
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("sftp文件服务器文件夹[{}],下载到本地目录[{}]", new Object[]{remoteFilePath, localDirFile});
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("sftp文件服务器文件夹[{}],下载到本地目录[{}]", new Object[]{remoteFilePath, localDirFile});
         }
         ChannelSftp channelSftp = connect(sftpConfig);
         Vector<ChannelSftp.LsEntry> lsEntries = channelSftp.ls(remoteFilePath);
-        if (logger.isInfoEnabled()) {
-            logger.info("远程目录下的文件为[{}]", lsEntries);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("远程目录下的文件为[{}]", lsEntries);
         }
         for (ChannelSftp.LsEntry entry : lsEntries) {
             String fileName = entry.getFilename();

@@ -53,6 +53,7 @@ public class ScheduleApplication {
     }
 
     public void triggerUploadFile() {
+        LOGGER.info("triggerUploadFile");
         taskScheduler.schedule(() -> {
             try {
                 Boolean result = uploadFile();

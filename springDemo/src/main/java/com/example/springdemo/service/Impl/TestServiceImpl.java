@@ -19,9 +19,12 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Mono<String> test() {
-        Mono<String> result = webclient.post().uri("/hello")
-                .retrieve()
-                .bodyToMono(String.class);
+        Mono<String> result =
+                webclient
+                        .post()
+                        .uri("/")
+                        .retrieve()
+                        .bodyToMono(String.class);
         return result;
     }
 }
