@@ -36,6 +36,6 @@ public class SftpController {
     public CommonResult testSftp(@RequestBody String placeholder, BindingResult result) {
         LOGGER.info("testSftp");
         scheduleApplication.triggerUploadFile();
-        return CommonResult.success(null, "sftp finished");
+        return CommonResult.success(null, "sftp begin");
     }
 }

@@ -45,10 +45,11 @@ public class ScheduleApplication {
     public Boolean uploadFile() throws ExecutionException, InterruptedException {
         asyncServiceImpl = new AsyncLogicImpl();
         CompletableFuture<Boolean> result = CompletableFuture.supplyAsync(() -> {
-            LOGGER.info("当前线程名: ", Thread.currentThread().getName());
+            LOGGER.info("当前线程名: " + Thread.currentThread().getName());
             asyncServiceImpl.uploadFilesAsync(0);
             return true;
         }, taskExecutor);
+
         return result.get();
     }
 
@@ -60,7 +61,7 @@ public class ScheduleApplication {
                 if (result == true) {
                     // TODO block是一个可以优化的点
                     String resultFromFlask = testService.test().block();
-                    LOGGER.info("resultFromFlask: ", resultFromFlask);
+                    LOGGER.info("resultFromFlask: " + resultFromFlask);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 throw new RuntimeException(e);

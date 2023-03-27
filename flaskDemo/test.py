@@ -4,5 +4,5 @@ from utils.SftpUtil import SftpUtil
 
 if __name__ == "__main__":
     cfg = ConfigParser()
-    sftp = SftpUtil('../sftpConfig.ini')
+    sftp = SftpUtil('config/sftpConfig.ini')
     sftp.uploadFile(FileUtil.getAllFiles(cfg.get('sftp', 'localpath')))
