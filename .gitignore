@@ -4,5 +4,8 @@ springDemo/.mvn
 springDemo/src/main/resources/*.yml
 springDemo/src/main/resources/*.properties
 springDemo/HELP.md
+springDemo/mvnw
+springDemo/mvnw.cmd
+springDemo/target
 
 flaskDemo/config/sftpConfig.ini
