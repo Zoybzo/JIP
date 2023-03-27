@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
 
 import static com.example.springdemo.utils.FileUtil.getFilePathForUpload;
 
@@ -37,8 +38,13 @@ public class AsyncLogicImpl implements AsyncLogic {
         LOGGER.info("end executeAsync");
     }
 
+    /**
+     * 这块没有直接用异步，而是在定时任务里面用了
+     *
+     * @param begin
+     */
     @Override
-    @Async("taskExecutor")
+//    @Async("taskExecutor")
     public void uploadFilesAsync(int begin) {
         SftpUtil ftp = new SftpUtil(3, 6000);
         try {
