@@ -6,6 +6,7 @@ from utils import FileUtil
 from utils.SftpUtil import SftpUtil
 
 cfg = ConfigParser()
+cfg.read('config/sftpConfig.ini')
 
 app = Flask(__name__)
 
@@ -24,7 +25,8 @@ def callSftp():
 
 
 def testSpringDemo():
-    tgt = cfg.get('sftp', 'hostname') + ':' + cfg.get('sftp', 'port') + '/test'
+    tgt = cfg.get('sftp', 'hostname') + ':' + cfg.get('sftp', 'springboot-port') + '/test'
+    print(requests.get(tgt).content)
     return requests.get(tgt).content
 
 
