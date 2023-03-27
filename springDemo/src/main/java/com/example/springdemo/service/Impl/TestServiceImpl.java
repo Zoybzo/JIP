@@ -21,8 +21,8 @@ public class TestServiceImpl implements TestService {
     public Mono<String> test() {
         Mono<String> result =
                 webclient
-                        .post()
-                        .uri("/")
+                        .get()
+                        .uri("/sftp")
                         .retrieve()
                         .bodyToMono(String.class);
         return result;

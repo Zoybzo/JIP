@@ -24,7 +24,7 @@ public class SftpController {
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult testRequest(@RequestBody String placeholder, BindingResult result) {
-        LOGGER.info("testRequest: ", placeholder);
+        LOGGER.info("testRequest: " + placeholder);
         return CommonResult.success(null, "test success");
     }
 
