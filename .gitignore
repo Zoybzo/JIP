@@ -9,3 +9,6 @@ springDemo/mvnw.cmd
 springDemo/target
 
 flaskDemo/config/sftpConfig.ini
+flaskDemo/**/__pycache__/
+flaskDemo/__pycache__/
+flaskDemo/target/

@@ -12,14 +12,15 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():  # put application's code here
+    print('hello_world')
     return 'Hello World!'
 
 
-@app.route('/sftp', methods=['POST'])
+@app.route('/sftp', methods=['GET'])
 def callSftp():
-    sftp = SftpUtil('../config.ini')
+    sftp = SftpUtil('config/sftpConfig.ini')
     sftp.uploadFile(FileUtil.getAllFiles(cfg.get('sftp', 'localpath')))
-    return None
+    return "sftp succeed"
 
 
 def testSpringDemo():
@@ -33,4 +34,4 @@ def testSftpSprintDemo():
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=12138, debug=True)
+    app.run(host=cfg.get('server', 'hostname'), port=cfg.getint('server', 'port'), debug=True)
